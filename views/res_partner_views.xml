@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_kanban_debt_tracker" model="ir.ui.view">
+        <field name="name">res.partner.kanban.debt.tracker</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position="after">
+                <div invisible="net_balance == 0" class="mt-1">
+                    <span t-attf-class="#{record.net_balance.raw_value &lt; 0 ? 'text-danger' : 'text-success'} fw-bold">
+                         <i class="fa fa-money me-1"/> <field name="net_balance" widget="monetary"/>
+                    </span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_form_debt_tracker" model="ir.ui.view">
+        <field name="name">res.partner.form.debt.tracker</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_partner_invoices" icon="fa-money" invisible="net_balance == 0">
+                    <div class="o_stat_info">
+                        <span t-attf-class="o_stat_value #{net_balance &lt; 0 ? 'text-danger' : 'text-success'}">
+                            <field name="net_balance" widget="monetary"/>
+                        </span>
+                        <span class="o_stat_text">Net Balance</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>
